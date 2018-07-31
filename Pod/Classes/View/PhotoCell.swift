@@ -81,10 +81,10 @@ final class PhotoCell: UICollectionViewCell {
     fileprivate func updateAlpha(_ selected: Bool) {
         if selected == true {
             self.selectionView.alpha = 1.0
-            self.selectionOverlayView.alpha = 0.3
+//            self.selectionOverlayView.alpha = 0.6
         } else {
             self.selectionView.alpha = 0.0
-            self.selectionOverlayView.alpha = 0.0
+//            self.selectionOverlayView.alpha = 0.0
         }
     }
 }

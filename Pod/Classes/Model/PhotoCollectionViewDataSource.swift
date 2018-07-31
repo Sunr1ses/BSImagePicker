@@ -90,8 +90,15 @@ final class PhotoCollectionViewDataSource : NSObject, UICollectionViewDataSource
             }
             
             cell.photoSelected = true
+            cell.imageView.alpha = 1.0
         } else {
             cell.photoSelected = false
+            
+            if selections.count >= (settings?.maxNumberOfSelections ?? Int.max) {
+                cell.imageView.alpha = 0.3
+            } else {
+                cell.imageView.alpha = 1.0
+            }
         }
         
         cell.isAccessibilityElement = true

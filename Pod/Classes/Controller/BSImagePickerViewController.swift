@@ -66,7 +66,7 @@ open class BSImagePickerViewController : UINavigationController {
     
     @objc var albumTitleView: UIButton = {
         let btn =  UIButton(frame: .zero)
-        btn.setTitleColor(btn.tintColor, for: .normal)
+        btn.setTitleColor(UIColor(red: 145.0 / 255.0, green: 205.0 / 255.0, blue: 225.0 / 255.0, alpha: 1.0), for: .normal)
         return btn
     }()
     
@@ -80,7 +80,7 @@ open class BSImagePickerViewController : UINavigationController {
         vc.doneBarButton = self.doneButton
         vc.cancelBarButton = self.cancelButton
         vc.albumTitleView = self.albumTitleView
-        
+        self.navigationBar.tintColor = UIColor(red: 145.0 / 255.0, green: 205.0 / 255.0, blue: 225.0 / 255.0, alpha: 1.0)
         return vc
     }()
     

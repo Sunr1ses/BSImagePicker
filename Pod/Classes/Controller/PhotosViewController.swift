@@ -306,6 +306,7 @@ extension PhotosViewController {
         // Select or deselect?
         if let index = photosDataSource.selections.index(of: asset) { // Deselect
             // Deselect asset
+
             photosDataSource.selections.remove(at: index)
 
             // Update done button
@@ -331,9 +332,16 @@ extension PhotosViewController {
                     closure(asset)
                 }
             }
+            
+            if photosDataSource.selections.count == settings.maxNumberOfSelections - 1 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                    self.collectionView?.reloadData()
+                })
+            }
         } else if photosDataSource.selections.count < settings.maxNumberOfSelections { // Select
             // Select asset if not already selected
             photosDataSource.selections.append(asset)
+
 
             // Set selection number
             if let selectionCharacter = settings.selectionCharacter {
@@ -343,7 +351,7 @@ extension PhotosViewController {
             }
 
             cell.photoSelected = true
-
+            
             // Update done button
             updateDoneButton()
 
@@ -352,6 +360,12 @@ extension PhotosViewController {
                 DispatchQueue.global().async {
                     closure(asset)
                 }
+            }
+            
+            if photosDataSource.selections.count == settings.maxNumberOfSelections {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                    self.collectionView?.reloadData()
+                })
             }
         }
 
