@@ -38,7 +38,7 @@
                         </constraints>
                     </view>
                     <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZWL-2w-R4Y" customClass="SelectionView" customModule="BSImagePicker">
-                        <rect key="frame" x="71" y="71" width="25" height="25"/>
+                        <rect key="frame" x="71" y="4" width="25" height="25"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="KmA-hg-Sja"/>
