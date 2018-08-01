@@ -55,13 +55,34 @@ open class BSImagePickerViewController : UINavigationController {
     @objc open lazy var fetchResults: [PHFetchResult] = { () -> [PHFetchResult<PHAssetCollection>] in
         let fetchOptions = PHFetchOptions()
         
+        
+        var result: [PHFetchResult<PHAssetCollection>] = []
+        
         // Camera roll fetch result
-        let cameraRollResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: fetchOptions)
+        result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: fetchOptions))
+        result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumFavorites, options: fetchOptions))
         
-        // Albums fetch result
-        let albumResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions)
+        if #available(iOS 9.0, *) {
+            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumSelfPortraits, options: fetchOptions))
+            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumScreenshots, options: fetchOptions))
+        }
+        if #available(iOS 10.2, *) {
+            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumDepthEffect, options: fetchOptions))
+        }
+
+        if #available(iOS 10.3, *) {
+            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumLivePhotos, options: fetchOptions))
+        }
+
+        if #available(iOS 11.0, *) {
+            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumAnimated, options: fetchOptions))
+            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumLongExposures, options: fetchOptions))
+        }
+
+        result.append(PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions))
+
         
-        return [cameraRollResult, albumResult]
+        return result
     }()
     
     @objc var albumTitleView: UIButton = {
