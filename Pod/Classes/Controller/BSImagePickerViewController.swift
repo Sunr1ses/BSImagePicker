@@ -55,7 +55,6 @@ open class BSImagePickerViewController : UINavigationController {
     @objc open lazy var fetchResults: [PHFetchResult] = { () -> [PHFetchResult<PHAssetCollection>] in
         let fetchOptions = PHFetchOptions()
         
-        
         var result: [PHFetchResult<PHAssetCollection>] = []
         
         // Camera roll fetch result
@@ -79,9 +78,9 @@ open class BSImagePickerViewController : UINavigationController {
             result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumLongExposures, options: fetchOptions))
         }
 
+        fetchOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0")
         result.append(PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions))
 
-        
         return result
     }()
     
