@@ -63,6 +63,9 @@ final class AlbumTableViewDataSource : NSObject, UITableViewDataSource {
         ]
         fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
         
+        cell.firstImageView.image = nil
+        cell.secondImageView.image = nil
+        cell.thirdImageView.image = nil
         let result = PHAsset.fetchAssets(in: album, options: fetchOptions)
         result.enumerateObjects({ (asset, idx, stop) in
             let imageSize = CGSize(width: 79, height: 79)

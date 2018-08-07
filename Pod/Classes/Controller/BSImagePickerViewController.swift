@@ -54,28 +54,43 @@ open class BSImagePickerViewController : UINavigationController {
     
     @objc open lazy var fetchResults: [PHFetchResult] = { () -> [PHFetchResult<PHAssetCollection>] in
         let fetchOptions = PHFetchOptions()
-        
+
         var result: [PHFetchResult<PHAssetCollection>] = []
         
         // Camera roll fetch result
         result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: fetchOptions))
-        result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumFavorites, options: fetchOptions))
+        
+        if let value = fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumFavorites, options: fetchOptions) {
+            result.append(value)
+        }
         
         if #available(iOS 9.0, *) {
-            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumSelfPortraits, options: fetchOptions))
-            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumScreenshots, options: fetchOptions))
+            if let value = fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumSelfPortraits, options: fetchOptions) {
+                result.append(value)
+            }
+            if let value = fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumScreenshots, options: fetchOptions) {
+                result.append(value)
+            }
         }
         if #available(iOS 10.2, *) {
-            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumDepthEffect, options: fetchOptions))
+            if let value = fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumDepthEffect, options: fetchOptions) {
+                result.append(value)
+            }
         }
 
         if #available(iOS 10.3, *) {
-            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumLivePhotos, options: fetchOptions))
+            if let value = fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumLivePhotos, options: fetchOptions) {
+                result.append(value)
+            }
         }
 
         if #available(iOS 11.0, *) {
-            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumAnimated, options: fetchOptions))
-            result.append(PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumLongExposures, options: fetchOptions))
+            if let value = fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumAnimated, options: fetchOptions) {
+                result.append(value)
+            }
+            if let value = fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumLongExposures, options: fetchOptions) {
+                result.append(value)
+            }
         }
 
         fetchOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0")
@@ -83,6 +98,15 @@ open class BSImagePickerViewController : UINavigationController {
 
         return result
     }()
+    
+    private func fetchAssetCollections(with type: PHAssetCollectionType, subtype: PHAssetCollectionSubtype, options: PHFetchOptions?) -> PHFetchResult<PHAssetCollection>? {
+        let result = PHAssetCollection.fetchAssetCollections(with: type, subtype: subtype, options: options)
+
+        if let obj = result.firstObject, obj.photosCount > 0 {
+            return result
+        }
+        return nil
+    }
     
     @objc var albumTitleView: UIButton = {
         let btn =  UIButton(frame: .zero)
@@ -287,5 +311,14 @@ extension BSImagePickerViewController {
         set {
             albumTitleView = newValue
         }
+    }
+}
+
+extension PHAssetCollection {
+    var photosCount: Int {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+        let result = PHAsset.fetchAssets(in: self, options: fetchOptions)
+        return result.count
     }
 }
